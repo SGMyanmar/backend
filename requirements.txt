@@ -1,7 +1,7 @@
 django
 djangorestframework
 djangorestframework-simplejwt
-django-cors-header
+django-cors-headers
 drf_yasg
 xhtml2pdf
 Jinja2
