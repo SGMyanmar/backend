@@ -4,6 +4,7 @@ from django.db import models
 STATUS_CHOICES = (
     ('pending', 'Pending'),
     ('paid', 'Paid'),
+    ('delivered', 'Delivered'),
     ('canceled', 'Canceled'),
 )
 
@@ -29,7 +30,7 @@ class RecipientInfo(models.Model):
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
     address = models.TextField()
-    postal_code =  models.CharField(max_length=20)
+    postal_code = models.CharField(max_length=20)
 
     def __str__(self):
         return self.name
@@ -40,26 +41,30 @@ class SenderInfo(models.Model):
     email = models.EmailField()
     phone = models.CharField(max_length=20)
     address = models.TextField()
-    postal_code =  models.CharField(max_length=20)
+    postal_code = models.CharField(max_length=20)
 
     def __str__(self):
         return self.name
 
 
 class Order(models.Model):
+    order_id = models.CharField(max_length=200, default='Outdated-ID', null=True, blank=True)
+    shipping_method = models.CharField(max_length=20, choices=SHIPPING_METHODS)
     recipient_info = models.OneToOneField(
         RecipientInfo, on_delete=models.CASCADE)
     sender_info = models.OneToOneField(SenderInfo, on_delete=models.CASCADE)
     discount_coupon = models.CharField(max_length=50, null=True, blank=True)
+    shelf_no = models.CharField(max_length=50, null=True, blank=True)
     type = models.CharField(max_length=20, choices=TYPE_CHOICES)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
     qr_code = models.ImageField(upload_to='qr_codes/', null=True)
     who_pay = models.CharField(max_length=20, choices=WHO_PAY)
     date = models.DateTimeField(auto_now_add=True)
+    total_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
         return f"Order {self.id} - {self.recipient_info.name}"
-
+    
 
 class Item(models.Model):
     name = models.CharField(max_length=100)
@@ -97,9 +102,19 @@ class Addon(models.Model):
 
 
 class AddonChoice(models.Model):
-    addon = models.ForeignKey(Addon, on_delete=models.CASCADE, related_name='choices')
+    addon = models.ForeignKey(
+        Addon, on_delete=models.CASCADE, related_name='choices')
     name = models.CharField(max_length=200)
     fee = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return self.name
+
+
+class OrderAddon(models.Model):
+    order = models.ForeignKey(
+        Order, on_delete=models.CASCADE, related_name='order_addons')
+    addon = models.ForeignKey(
+        Addon, on_delete=models.CASCADE, related_name='order_addons')
+    addon_choice = models.ForeignKey(
+        AddonChoice, on_delete=models.CASCADE, related_name='order_addons')

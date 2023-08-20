@@ -43,4 +43,7 @@ urlpatterns = [
     path("api/", include("staff.urls")),
 ]
 
+admin.site.site_header = "SGMyanmar Backend Administration"
+admin.site.site_title = "SGMyanmar Backend Administration"
+admin.site.index_title = "SGMyanmar Backend Administration"
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

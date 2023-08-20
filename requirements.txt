@@ -4,5 +4,7 @@ djangorestframework-simplejwt
 django-cors-headers
 drf_yasg
 xhtml2pdf
+weasyprint
 Jinja2
 qrcode
+drf-writable-nested

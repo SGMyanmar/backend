@@ -1,43 +1,93 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Row Layout for PDF</title>
     <style>
-        .heading,
-        .footer {
-            background-color: orange;
+        .row-container {
+            display: block;
+            width: 100%;
+            white-space: nowrap; /* Prevent items from wrapping to the next line */
+        }
+
+        .row-item {
+            display: block;
+            margin: 20px;
             padding: 20px;
             font-size: 20px;
             color: white;
+            font-weight: bold;
+            background-color: rgb(107, 133, 13);
+            border: 1px solid #ccc;
         }
-        
-        .content {
-            margin-top: 20px;
-            margin-bottom: 20px;
+
+        .topic {
+            color:rgb(107, 133, 13);
+        }
+
+        .row-body {
+            display: block;
+            margin: 20px;
+            padding: 20px;
             font-size: 15px;
+            background-color: #eeeeee;
+            border: 1px solid #ccc;
         }
+
+        .qr {
+            width: 250px;
+            height: 250px;
+        }
+
+        .logo {
+            width: 100px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
     </style>
 </head>
-
 <body>
-    <div class="heading">
-        <h1 class="font-bold text-2xl">Heading</h1>
-    </div>
-    <div class="content">
-        <p>{{data1}}</p>
-    </div>
-    <div class="content">
-        <p>{{data2}}</p>
-    </div>
-    <div class="content">
-        <p>{{data3}}</p>
-    </div>
-    <div class="footer">
-        <h1 class="font-bold text-2xl">Footer</h1>
+    <div class="row-container">
+        <img src="/static/logo.webp" class="logo">
+        <div class="row-item">
+            SGMyanmar Parcel Review Pending</div>
+        </div>
+        <div class="row-body">
+            <p class="topic">Parcel ID: {{order.order_id}}</p>
+            <p class="topic">Shipping Method: {{order.shipping_method}}</p>
+            <img src="{{order.qr_code}}" class="qr"> 
+        </div>
+        <div class="row-body">
+            <p class="topic">Sender Info</p>
+            {{order.sender_info.name}}<br>
+            {{order.sender_info.address}}<br>
+            {{order.recipient_info.phone}}<br>
+        </div>
+        <div class="row-body">
+            <p class="topic">Recipient Info</p>
+            {{order.recipient_info.name}}<br>
+            {{order.recipient_info.address}}<br>
+            {{order.recipient_info.phone}}<br>
+        </div>
+        <!-- <div class="row-body">
+            <p class="topic">Items</p>
+            {% for item in items %}
+            {{item.name.title()}} - uncalculated weight - uncalculated fee
+            {% endfor %}
+        </div>
+        <div class="row-body">
+            {% for addon, choice, fee in addons %}
+            <p class="topic">{{addon}}</p>
+            {{choice}}
+            {{fee}} SGD
+            {% endfor %}
+        </div> -->
+        <div class="row-item">
+            <div>sgmyanmar@sgmyanmar.com</div>
+        </div>
+        
+        <!-- Add more items as needed -->
     </div>
 </body>
-
-</html>
-
 </html>

@@ -1,0 +1,4 @@
+pdf templates 
+user rules and addon views
+user addons submit
+staff frontend 

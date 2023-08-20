@@ -3,9 +3,6 @@ from rest_framework.response import Response
 from .models import *
 from .serializers import *
 from rest_framework import status
-from app_auth import permissions
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.views import APIView
 
 from utils import email_sending as mail
@@ -36,28 +33,14 @@ class AddonsAPIView(APIView):
         return Response(serializer.data)
 
 
-class OrderUpdateAPIView(generics.UpdateAPIView):
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated, permissions.IsStaffOrSuperUser]
-    authentication_classes = [JWTAuthentication]
+class AddonChoiceAPIView(generics.RetrieveAPIView):
+    queryset = AddonChoice.objects.all()
+    serializer_class = ChoiceSerializer
 
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class OrderInfoAPIView(generics.RetrieveAPIView):
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer
-
-    def get(self, request, *args, **kwargs):
+    def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data)
 
 
 class SubmitOrderAPIView(generics.CreateAPIView):

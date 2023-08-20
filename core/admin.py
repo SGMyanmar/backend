@@ -4,10 +4,13 @@ from .models import *
 class ItemInline(admin.TabularInline):
     model = Item
 
+class OrderAddonInline(admin.TabularInline):
+    model = OrderAddon
+    extra = 1  # You can adjust the number of extra forms to display
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('id', 'recipient', 'sender', 'items_info', 'discount_coupon', 'status', 'date')
-    inlines = [ItemInline]
+    inlines = [ItemInline, OrderAddonInline]  # Include the OrderAddonInline here
 
     def recipient(self, obj):
         return f"{obj.recipient_info.name} - {obj.recipient_info.phone} - {obj.recipient_info.address}"
@@ -28,5 +31,13 @@ class OrderAdmin(admin.ModelAdmin):
 
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Rule)
-admin.site.register(Addon)
-admin.site.register(AddonChoice)
+
+class AddonChoiceInline(admin.TabularInline):
+    model = AddonChoice
+    extra = 1  # You can adjust the number of extra forms to display
+
+class AddonAdmin(admin.ModelAdmin):
+    list_display = ('name', 'type')
+    inlines = [AddonChoiceInline]  # Include the AddonChoiceInline here
+
+admin.site.register(Addon, AddonAdmin)

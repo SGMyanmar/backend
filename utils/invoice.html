@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Row Layout for PDF</title>
+    <style>
+        .row-container {
+            display: block;
+            width: 100%;
+            white-space: nowrap; /* Prevent items from wrapping to the next line */
+        }
+
+        .row-item {
+            display: block;
+            margin: 20px;
+            padding: 20px;
+            font-size: 20px;
+            color: white;
+            font-weight: bold;
+            background-color: rgb(107, 133, 13);
+            border: 1px solid #ccc;
+        }
+
+        .topic {
+            color:rgb(107, 133, 13);
+        }
+
+        .row-body {
+            display: block;
+            margin: 20px;
+            padding: 20px;
+            font-size: 15px;
+            background-color: #eeeeee;
+            border: 1px solid #ccc;
+        }
+
+        .qr {
+            width: 250px;
+            height: 250px;
+        }
+
+        .logo {
+            width: 100px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="row-container">
+        <img src="/static/logo.webp" class="logo">
+        <div class="row-item">
+            SGMyanmar Parcel Invoice
+        </div>
+        <div class="row-body">
+            <p class="topic">Parcel ID: {{order.order_id}}</p>
+            <p class="topic">Shipping Method: {{order.shipping_method}}</p>
+            <p>Who will pay: {{order.who_pay}}</p>
+            <p>Total Fee: {{order.total_fee}} SGD<br>PayNow to mobile 93250329 or UEN number 53413642K</p>
+            <img src="{{order.qr_code}}" class="qr"> 
+        </div>
+        <div class="row-body">
+            <p class="topic">Sender Info</p>
+            {{order.sender_info.name}}<br>
+            {{order.sender_info.address}}<br>
+            {{order.recipient_info.phone}}<br>
+        </div>
+        <div class="row-body">
+            <p class="topic">Recipient Info</p>
+            {{order.recipient_info.name}}<br>
+            {{order.recipient_info.address}}<br>
+            {{order.recipient_info.phone}}<br>
+        </div>
+        <div class="row-body">
+            <p class="topic">Items</p>
+            {% for item in order.items.all() %}
+            {{item.name.title()}} - {{item.weight}} Kg - {{item.fee}} SGD
+            {% endfor %}
+        </div>
+        <div class="row-body">
+            {% for addon, choice, fee in addons %}
+            <p class="topic">{{addon}}</p>
+            {{choice}} - {{fee}} SGD
+            {% endfor %}
+        </div>
+        <div class="row-body">
+1. All prices stated here are in Singapore Dollars<br>
+2. Any illegal items will not be accepted<br>
+3. Arrival schedule might change due to unforeseen circumstances<br>
+4. We are not responsible for damaged items that are not declared<br>
+        </div>
+        <div class="row-item">
+            <div>sgmyanmar@sgmyanmar.com</div>
+        </div>
+    </div>
+</body>
+</html>
